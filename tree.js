@@ -26,8 +26,9 @@ gui.add(params, "random").name("Aléatoire").onChange(drawTree);
 drawTree();
 
 function drawTree() {
-  svg.innerHTML = "";
-  generateBranch(svg, window.innerWidth / 2, window.innerHeight, -90, params.length, params.depth);
+  svg.innerHTML = ""; // Réinitialiser le SVG avant chaque dessin
+  // Position de départ au centre de l'écran, avec une direction vers la droite (angle 0)
+  generateBranch(svg, 500, 500, 0, params.length, params.depth);
 }
 
 function generateBranch(parent, x, y, angle, length, depth) {
@@ -51,8 +52,23 @@ function generateBranch(parent, x, y, angle, length, depth) {
     gsap.from(line, { duration: 0.5, opacity: 0, scaleY: 0, ease: "power2.out" });
   }
 
-  for (let i = 0; i < params.branchFactor; i++) {
-    const newAngle = angle + (i % 2 === 0 ? -90 : 90);
+  // Si le paramètre 'random' est activé, choisir un nombre de branches aléatoire entre 1 et 3
+  const branchCount = params.random ? Math.floor(Math.random() * 2) + 1 : params.branchFactor;
+
+  for (let i = 0; i < branchCount; i++) {
+    let newAngle;
+    if (angle === 0) {
+      // Si l'angle précédent est 0, on génère des branches à gauche et à droite
+      newAngle = (i === 0) ? -90 : 90;  // À gauche ou à droite
+    } else if (angle === -90) {
+      // Si l'angle précédent est -90, la branche suivante peut aller à droite (0) ou à gauche (90)
+      newAngle = (i === 0) ? 0 : -90;
+    } else if (angle === 90) {
+      // Si l'angle précédent est 90, la branche suivante peut aller à gauche (0) ou à droite (-90)
+      newAngle = (i === 0) ? 0 : 90;
+    }
+
+    // Appel récursif pour générer la branche suivante avec l'angle calculé
     generateBranch(parent, x2, y2, newAngle, length * 0.75 * randomFactor, depth - 1);
   }
 }
