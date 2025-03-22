@@ -6,11 +6,11 @@ class GridApp:
         self.master = master
         self.grid_size = grid_size
         self.cell_size = cell_size
-        self.points = []
-        self.lines = []
+        self.points = []  # Liste des points principaux
+        self.lines = []  # Liste des lignes coudées
         self.start_point = None
-        self.current_line = None
         self.temp_points = []  # Liste pour stocker les points intermédiaires pendant la création de la ligne
+        self.current_line = None
 
         self.canvas = tk.Canvas(master, width=grid_size * cell_size, height=grid_size * cell_size)
         self.canvas.pack()
@@ -26,7 +26,7 @@ class GridApp:
             self.canvas.create_line(0, i * self.cell_size, self.grid_size * self.cell_size, i * self.cell_size, fill="lightgray")
 
     def start_line(self, event):
-        # Enregistrer le point de départ
+        # Enregistrer le point de départ (point principal)
         self.start_point = (event.x // self.cell_size, event.y // self.cell_size)
         self.points.append(self.start_point)
         self.temp_points = [self.start_point]  # Réinitialiser la liste des points intermédiaires
@@ -41,8 +41,6 @@ class GridApp:
         # Si le dernier point ajouté est différent du point actuel, ajouter un nouveau point intermédiaire
         if current_pos != self.temp_points[-1]:
             self.temp_points.append(current_pos)
-            self.canvas.create_oval(current_pos[0] * self.cell_size, current_pos[1] * self.cell_size,
-                                    (current_pos[0] + 1) * self.cell_size, (current_pos[1] + 1) * self.cell_size, fill="blue")
 
             # Effacer la ligne précédente
             if self.current_line:
@@ -54,6 +52,7 @@ class GridApp:
                                                         current_pos[0] * self.cell_size + self.cell_size / 2,
                                                         current_pos[1] * self.cell_size + self.cell_size / 2, fill="blue")
 
+            # Dessiner des lignes entre chaque paire de points intermédiaires
             for i in range(1, len(self.temp_points)):
                 self.canvas.create_line(self.temp_points[i-1][0] * self.cell_size + self.cell_size / 2,
                                         self.temp_points[i-1][1] * self.cell_size + self.cell_size / 2,
@@ -68,18 +67,18 @@ class GridApp:
 
         # Dessiner la ligne finale entre tous les points intermédiaires
         self.lines.append(self.temp_points)
-        self.canvas.create_line(self.temp_points[0][0] * self.cell_size + self.cell_size / 2,
-                                self.temp_points[0][1] * self.cell_size + self.cell_size / 2,
-                                self.temp_points[-1][0] * self.cell_size + self.cell_size / 2,
-                                self.temp_points[-1][1] * self.cell_size + self.cell_size / 2, fill="blue")
+        
+        # Supprimer la ligne droite entre le point de départ et d'arrivée
+        self.canvas.delete(self.current_line)
 
+        # Dessiner la série de lignes coudées
         for i in range(1, len(self.temp_points)):
             self.canvas.create_line(self.temp_points[i-1][0] * self.cell_size + self.cell_size / 2,
                                     self.temp_points[i-1][1] * self.cell_size + self.cell_size / 2,
                                     self.temp_points[i][0] * self.cell_size + self.cell_size / 2,
                                     self.temp_points[i][1] * self.cell_size + self.cell_size / 2, fill="blue")
 
-        # Ajouter le dernier point à la liste des points
+        # Ajouter les points principaux à la liste des points (mais les points intermédiaires ne sont pas visibles)
         self.points.extend(self.temp_points)
 
         # Réinitialiser le point de départ
@@ -88,6 +87,7 @@ class GridApp:
 
     def export_svg(self, filename="output.svg"):
         dwg = svgwrite.Drawing(filename, profile='tiny')
+        # Tracer les lignes coudées en SVG
         for line in self.lines:
             for i in range(1, len(line)):
                 start = line[i-1]
@@ -95,6 +95,7 @@ class GridApp:
                 dwg.add(dwg.line(start=(start[0] * self.cell_size, start[1] * self.cell_size),
                                  end=(end[0] * self.cell_size, end[1] * self.cell_size),
                                  stroke='blue'))
+        # Ajouter les points principaux en SVG
         for point in self.points:
             dwg.add(dwg.circle(center=(point[0] * self.cell_size, point[1] * self.cell_size),
                                r=5, fill='red'))
