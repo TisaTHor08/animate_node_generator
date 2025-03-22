@@ -12,6 +12,7 @@
       padding: 20px;
       background-color: #f7f7f7;
     }
+  
     #tree-container {
       width: 100%;
       height: 500px;
@@ -20,6 +21,7 @@
       align-items: center;
       margin-bottom: 20px;
     }
+  
     button {
       padding: 10px 20px;
       font-size: 16px;
@@ -29,10 +31,36 @@
       border: none;
       border-radius: 5px;
     }
+  
     button:hover {
       background-color: #45a049;
     }
+  
+    /* Animation de croissance et rétraction des branches */
+    @keyframes growAndShrink {
+      0% {
+        x2: 0;
+        y2: 0;
+      }
+      50% {
+        x2: var(--end-x);
+        y2: var(--end-y);
+      }
+      100% {
+        x2: 0;
+        y2: 0;
+      }
+    }
+  
+    .branch {
+      opacity: 1;
+      transform-origin: 50% 50%;
+      animation: growAndShrink 2s ease-in-out infinite;
+    }
   </style>
+  
+  
+  
 </head>
 <body>
 
