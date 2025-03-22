@@ -7,7 +7,6 @@ const svg = document.getElementById("tree-svg");
 const params = {
   depth: 6,
   branchFactor: 2,
-  angle: 25,
   length: 100,
   thickness: 5,
   color: "#8B5A2B",
@@ -18,7 +17,6 @@ const params = {
 const gui = new dat.GUI();
 gui.add(params, "depth", 1, 10, 1).name("Profondeur").onChange(drawTree);
 gui.add(params, "branchFactor", 1, 4, 1).name("Branches").onChange(drawTree);
-gui.add(params, "angle", 10, 90, 1).name("Angle").onChange(drawTree);
 gui.add(params, "length", 50, 200, 1).name("Longueur").onChange(drawTree);
 gui.add(params, "thickness", 1, 10, 1).name("Épaisseur").onChange(drawTree);
 gui.addColor(params, "color").name("Couleur").onChange(drawTree);
@@ -54,7 +52,7 @@ function generateBranch(parent, x, y, angle, length, depth) {
   }
 
   for (let i = 0; i < params.branchFactor; i++) {
-    const newAngle = angle + (i - (params.branchFactor - 1) / 2) * params.angle * (params.random ? (Math.random() * 0.5 + 0.75) : 1);
+    const newAngle = angle + (i % 2 === 0 ? -90 : 90);
     generateBranch(parent, x2, y2, newAngle, length * 0.75 * randomFactor, depth - 1);
   }
 }
