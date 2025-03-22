@@ -44,7 +44,7 @@ function generateBranch(parent, x, y, angle, length, depth) {
   line.setAttribute("x2", x2);
   line.setAttribute("y2", y2);
   line.setAttribute("stroke", params.color);
-  line.setAttribute("stroke-width", params.thickness * (depth / params.depth));
+  line.setAttribute("stroke-width", params.thickness);  // Épaisseur constante
   line.setAttribute("stroke-linecap", "round");
   parent.appendChild(line);
 
@@ -53,7 +53,7 @@ function generateBranch(parent, x, y, angle, length, depth) {
   }
 
   // Si le paramètre 'random' est activé, choisir un nombre de branches aléatoire entre 1 et 3
-  const branchCount = params.random ? Math.floor(Math.random() * 2) + 1 : params.branchFactor;
+  const branchCount = params.random ? Math.floor(Math.random() * 3) + 1 : params.branchFactor;
 
   for (let i = 0; i < branchCount; i++) {
     let newAngle;
@@ -68,7 +68,10 @@ function generateBranch(parent, x, y, angle, length, depth) {
       newAngle = (i === 0) ? 0 : 90;
     }
 
-    // Appel récursif pour générer la branche suivante avec l'angle calculé
-    generateBranch(parent, x2, y2, newAngle, length * 0.75 * randomFactor, depth - 1);
+    // Calcul de la longueur de la branche entre 0.4 et 1.5 de la longueur du parent
+    const newLength = length * (0.4 + Math.random() * 1.1); // Entre 0.4 et 1.5
+
+    // Appel récursif pour générer la branche suivante avec l'angle et la longueur calculés
+    generateBranch(parent, x2, y2, newAngle, newLength, depth - 1);
   }
 }
