@@ -92,6 +92,9 @@ class GridDrawingApp:
                 
                 # Entourer les cases précédentes et suivantes en vert
                 self.highlight_surrounding_cases(p1, p3)
+                
+                # Dessiner une courbe de Bézier entre p1 et p3
+                self.draw_bezier_curve(p1, p2, p3)
     
     def is_angle(self, p1, p2, p3):
         # Fonction pour déterminer si un point p2 est un angle formé par p1 et p3
@@ -123,6 +126,24 @@ class GridDrawingApp:
             x, y = p
             radius = self.line_width_slider.get() * 2
             self.canvas.create_rectangle(x - radius, y - radius, x + radius, y + radius, outline="green", width=2)
+    
+    def draw_bezier_curve(self, p1, p2, p3):
+        # Fonction pour dessiner une courbe de Bézier quadratique entre p1, p2, et p3
+        x0, y0 = p1
+        x1, y1 = p2
+        x2, y2 = p3
+        
+        # Calculer les points de la courbe de Bézier pour différents t
+        bezier_points = []
+        for t in range(101):  # De t = 0 à t = 1, avec un pas de 0.01
+            t /= 100
+            x = (1 - t) ** 2 * x0 + 2 * (1 - t) * t * x1 + t ** 2 * x2
+            y = (1 - t) ** 2 * y0 + 2 * (1 - t) * t * y1 + t ** 2 * y2
+            bezier_points.append((x, y))
+        
+        # Tracer la courbe de Bézier sur le canevas
+        for i in range(len(bezier_points) - 1):
+            self.canvas.create_line(bezier_points[i], bezier_points[i+1], fill="blue", width=2)
     
     def reset(self):
         self.canvas.delete("all")
