@@ -163,22 +163,27 @@ class GridDrawingApp:
 
                 # Appliquer l'animation pour tracer la ligne
                 line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray, repeatCount='indefinite')
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray)
                 )
 
-                # Appliquer l'animation inverse pour effacer la ligne
+                # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
                 line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, repeatCount='indefinite', begin=f'{duration}s')
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
+                                begin=f'{duration + 0.5}s')  # Délai de 0,5s avant d'effacer
                 )
 
+                # Ajouter une animation de tracé répétée après l'effacement
+                line_elem.append_anim(
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray,
+                                begin=f'{duration * 2 + 0.5}s', repeatCount="indefinite")  # Recommence après effacement
+                )
+
+                # Ajouter l'élément au dessin
                 dwg.append(line_elem)
 
+        # Sauvegarder l'animation dans un fichier SVG
         dwg.save_svg('output_animated.svg')
         print("Exporté vers output_animated.svg")
-
-
-
-
 
 
     def print_intermediate_points(self, event):

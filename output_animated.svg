@@ -3,16 +3,9 @@
      width="570" height="570" viewBox="15 15 570 570">
 <defs>
 </defs>
-<path d="M210,90 L210,120 L210,150 L210,180 L240,180 L270,180 L270,210 L270,240 L270,270 L270,300" stroke="black" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="27.0s" from="1, 2700.0" to="2700.0, 0" repeatCount="indefinite" />
-<animate attributeName="stroke-dasharray" dur="27.0s" begin="27.0s" from="2700.0, 0" to="1, 2700.0" repeatCount="indefinite" />
-</path>
-<path d="M180,90 L180,120 L180,150 L180,180 L180,210 L180,240 L210,240 L210,210 L240,210 L240,240 L240,270 L210,270 L180,270 L180,300 L210,300 L240,300" stroke="black" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="45.0s" from="1, 4500.0" to="4500.0, 0" repeatCount="indefinite" />
-<animate attributeName="stroke-dasharray" dur="45.0s" begin="45.0s" from="4500.0, 0" to="1, 4500.0" repeatCount="indefinite" />
-</path>
-<path d="M240,90 L270,90 L270,120 L240,120 L240,150 L270,150" stroke="black" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="15.0s" from="1, 1500.0" to="1500.0, 0" repeatCount="indefinite" />
-<animate attributeName="stroke-dasharray" dur="15.0s" begin="15.0s" from="1500.0, 0" to="1, 1500.0" repeatCount="indefinite" />
+<path d="M150,120 L180,120 L210,120 L240,120 L270,120 L300,120 L330,120 L360,120" stroke="black" stroke-width="10" fill="none">
+<animate attributeName="stroke-dasharray" dur="21.0s" from="1, 2100.0" to="2100.0, 0" />
+<animate attributeName="stroke-dasharray" dur="21.0s" begin="21.5s" from="2100.0, 0" to="1, 2100.0" />
+<animate attributeName="stroke-dasharray" dur="21.0s" begin="42.5s" from="1, 2100.0" to="2100.0, 0" repeatCount="indefinite" />
 </path>
 </svg>
