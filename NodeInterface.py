@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import colorchooser
 import drawsvg as draw
+import time
 
 class GridDrawingApp:
     def __init__(self, root):
@@ -117,7 +118,7 @@ class GridDrawingApp:
 
         dwg.save_svg('output.svg')
         print("Exported to output.svg")
-    
+
     def export_animated_svg(self):
         margin_x, margin_y = 15, 15
         width = 585 - 15
@@ -134,7 +135,7 @@ class GridDrawingApp:
                                         r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
 
         # Vitesse constante en pixels par seconde
-        speed = 10  # pixels par seconde
+        speed = 100  # pixels par seconde
 
         # Ajouter une animation de stylo pour chaque ligne, qui trace tous les segments
         for line in self.lines:
@@ -153,13 +154,19 @@ class GridDrawingApp:
                 # Calculer la durée de l'animation en fonction de la longueur de la ligne et de la vitesse
                 duration = line_length / speed  # La durée est la longueur divisée par la vitesse
 
+                # Print pour vérifier la durée calculée
+                print(f"Durée calculée pour la ligne : {duration:.2f} secondes (longueur: {line_length:.2f} px, vitesse: {speed} px/s)")
+
+                # Démarrer le chronomètre
+                start_time = time.time()
+
                 # Ajouter chaque segment successivement à partir de la première coordonnée
                 for i in range(1, len(line)):
                     line_elem.L(line[i][0] - margin_x, line[i][1] - margin_y)
 
                 # Définir l'animation avec un `stroke-dasharray` constant
-                from_dasharray = f"1, {line_length * 10}"  # Segment très court au début
-                to_dasharray = f"{line_length * 10}, 0"  # Segment long à la fin
+                from_dasharray = f"1, {line_length * 1}"  # Segment très court au début
+                to_dasharray = f"{line_length * 1}, 0"  # Segment long à la fin
 
                 # Appliquer l'animation pour tracer la ligne
                 line_elem.append_anim(
@@ -169,13 +176,13 @@ class GridDrawingApp:
                 # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
-                                begin=f'{duration + 0.5}s')  # Délai de 0,5s avant d'effacer
+                                begin=f'{duration}s')  # Délai de 0,5s avant d'effacer
                 )
 
                 # Ajouter une animation de tracé répétée après l'effacement
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray,
-                                begin=f'{duration * 2 + 0.5}s', repeatCount="indefinite")  # Recommence après effacement
+                                begin=f'{duration * 2}s', repeatCount="indefinite")  # Recommence après effacement
                 )
 
                 # Ajouter l'élément au dessin
@@ -184,6 +191,8 @@ class GridDrawingApp:
         # Sauvegarder l'animation dans un fichier SVG
         dwg.save_svg('output_animated.svg')
         print("Exporté vers output_animated.svg")
+
+
 
 
     def print_intermediate_points(self, event):
