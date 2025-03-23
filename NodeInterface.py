@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import colorchooser
 import drawsvg as draw
 import time
+import math
 
 class GridDrawingApp:
     def __init__(self, root):
@@ -74,9 +75,44 @@ class GridDrawingApp:
         if len(self.dots) > 1:
             self.lines.append(self.dots)  # Ajouter la nouvelle ligne à la liste des lignes
             self.intermediate_points[len(self.lines)] = self.dots  # Stocker les points intermédiaires dans le dictionnaire
+            self.detect_angles(self.dots)  # Détecter les angles et afficher les cases rouges
             for i in range(len(self.dots) - 1):
                 self.canvas.create_line(self.dots[i], self.dots[i+1], fill=self.color, width=self.line_width_slider.get(), capstyle=tk.ROUND)
         self.dots = []  # Réinitialise les points après avoir tracé la ligne
+    
+    def detect_angles(self, points):
+        # Détecte les angles et dessine une case rouge pour chaque angle
+        for i in range(1, len(points) - 1):
+            p1, p2, p3 = points[i-1], points[i], points[i+1]
+            if self.is_angle(p1, p2, p3):
+                # Tracer une case rouge à l'angle
+                x, y = p2
+                radius = self.line_width_slider.get() * 2
+                self.canvas.create_rectangle(x - radius, y - radius, x + radius, y + radius, outline="red", width=2)
+    
+    def is_angle(self, p1, p2, p3):
+        # Fonction pour déterminer si un point p2 est un angle formé par p1 et p3
+        x1, y1 = p1
+        x2, y2 = p2
+        x3, y3 = p3
+        
+        # Calculer les vecteurs (p1 -> p2) et (p2 -> p3)
+        v1x, v1y = x2 - x1, y2 - y1
+        v2x, v2y = x3 - x2, y3 - y2
+        
+        # Calculer l'angle entre les deux vecteurs en utilisant le produit scalaire
+        dot_product = v1x * v2x + v1y * v2y
+        magnitude_v1 = math.sqrt(v1x**2 + v1y**2)
+        magnitude_v2 = math.sqrt(v2x**2 + v2y**2)
+        
+        if magnitude_v1 * magnitude_v2 == 0:
+            return False
+        
+        cos_theta = dot_product / (magnitude_v1 * magnitude_v2)
+        angle = math.acos(cos_theta)
+        
+        # Si l'angle est proche de 90 degrés, c'est un angle
+        return abs(angle - math.pi / 2) < 0.2
     
     def reset(self):
         self.canvas.delete("all")
@@ -171,24 +207,6 @@ class GridDrawingApp:
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', values=f'{from_dasharray}; {to_dasharray}; {from_dasharray}', repeatCount="indefinite")
                 )
-                """
-                # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
-                                begin=f'{duration}s')  # Délai de 0,5s avant d'effacer
-                )
-
-                # Ajouter une animation de tracé répétée après l'effacement
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray,
-                                begin=f'{duration * 2}s', repeatCount="indefinite")  # Recommence après effacement
-                )
-                # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
-                                begin=f'{duration * 3}s', repeatCount="indefinite")  # Délai de 0,5s avant d'effacer
-                )"""
-
                 # Ajouter l'élément au dessin
                 dwg.append(line_elem)
 
@@ -196,14 +214,10 @@ class GridDrawingApp:
         dwg.save_svg('output_animated.svg')
         print("Exporté vers output_animated.svg")
 
-
-
-
     def print_intermediate_points(self, event):
         for key, value in self.intermediate_points.items():
             print(f"Line {key}: {value}")
 
-# À la fin de ton code
 if __name__ == "__main__":
     root = tk.Tk()
     app = GridDrawingApp(root)
