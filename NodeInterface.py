@@ -161,15 +161,24 @@ class GridDrawingApp:
                 from_dasharray = f"1, {line_length * 10}"  # Segment très court au début
                 to_dasharray = f"{line_length * 10}, 0"  # Segment long à la fin
 
-                # Appliquer l'animation
+                # Appliquer l'animation pour tracer la ligne
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray, repeatCount='indefinite')
+                )
+
+                # Appliquer l'animation inverse pour effacer la ligne
+                line_elem.append_anim(
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, repeatCount='indefinite', begin=f'{duration}s')
                 )
 
                 dwg.append(line_elem)
 
         dwg.save_svg('output_animated.svg')
         print("Exporté vers output_animated.svg")
+
+
+
+
 
 
     def print_intermediate_points(self, event):
