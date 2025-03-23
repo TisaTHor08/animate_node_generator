@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="600" height="600" viewBox="-300.0 -300.0 600 600">
+<defs>
+</defs>
+<path d="M45,45 L45,75 L45,105" stroke="black" stroke-width="10" fill="none">
+<animate attributeName="stroke-dashoffset" dur="2s" from="100" to="0" repeatCount="indefinite" />
+<animate attributeName="stroke-dasharray" dur="2s" from="1, 200" to="200, 0" repeatCount="indefinite" />
+</path>
+<path d="M105,105 L105,135 L75,135" stroke="black" stroke-width="10" fill="none">
+<animate attributeName="stroke-dashoffset" dur="2s" from="100" to="0" repeatCount="indefinite" />
+<animate attributeName="stroke-dasharray" dur="2s" from="1, 200" to="200, 0" repeatCount="indefinite" />
+</path>
+</svg>
