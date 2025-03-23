@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="600" height="600" viewBox="-300.0 -300.0 600 600">
+     width="570" height="570" viewBox="15 15 570 570">
 <defs>
 </defs>
-<path d="M45,45 L45,75 L45,105" stroke="black" stroke-width="10" fill="none">
+<path d="M30,60 L30,30 L60,30" stroke="black" stroke-width="10" fill="none">
 <animate attributeName="stroke-dashoffset" dur="2s" from="100" to="0" repeatCount="indefinite" />
 <animate attributeName="stroke-dasharray" dur="2s" from="1, 200" to="200, 0" repeatCount="indefinite" />
 </path>
-<path d="M105,105 L105,135 L75,135" stroke="black" stroke-width="10" fill="none">
+<path d="M510,540 L540,540 L540,510" stroke="black" stroke-width="10" fill="none">
+<animate attributeName="stroke-dashoffset" dur="2s" from="100" to="0" repeatCount="indefinite" />
+<animate attributeName="stroke-dasharray" dur="2s" from="1, 200" to="200, 0" repeatCount="indefinite" />
+</path>
+<path d="M120,60 L120,90 L120,120 L120,150 L120,180 L120,210 L120,240 L120,270 L120,300 L120,330 L120,360 L120,390 L120,420 L120,450 L120,480 L120,510 L150,510 L180,510 L180,480 L180,450 L180,420 L180,390 L180,360 L180,330 L180,300 L180,270 L180,240 L180,210 L180,180 L180,150 L180,120 L180,90 L180,60" stroke="black" stroke-width="10" fill="none">
 <animate attributeName="stroke-dashoffset" dur="2s" from="100" to="0" repeatCount="indefinite" />
 <animate attributeName="stroke-dasharray" dur="2s" from="1, 200" to="200, 0" repeatCount="indefinite" />
 </path>

@@ -90,59 +90,73 @@ class GridDrawingApp:
             self.export_static_svg()
     
     def export_static_svg(self):
-        dwg = draw.Drawing(self.grid_size * self.cell_size, self.grid_size * self.cell_size, origin='center')
+        # Définir les coordonnées du rectangle de la zone de dessin
+        margin_x, margin_y = 15, 15
+        width = 585 - 15
+        height = 585 - 15
+        
+        dwg = draw.Drawing(width, height, origin=(margin_x, margin_y))
 
-        # Dessiner les lignes
+        # Dessiner les lignes avec la nouvelle translation
         for line in self.lines:
             if line and isinstance(line[0], tuple):
                 for i in range(len(line) - 1):
-                    # Passer les coordonnées sous forme de valeurs individuelles (sx, sy, ex, ey)
-                    dwg.append(draw.Line(sx=line[i][0], sy=line[i][1], ex=line[i+1][0], ey=line[i+1][1], stroke=self.color, stroke_width=self.line_width_slider.get(), stroke_linecap='round'))
+                    start_x, start_y = line[i]
+                    end_x, end_y = line[i+1]
+                    dwg.append(draw.Line(sx=start_x - margin_x, sy=start_y - margin_y, 
+                                         ex=end_x - margin_x, ey=end_y - margin_y, 
+                                         stroke=self.color, stroke_width=self.line_width_slider.get(), stroke_linecap='round'))
         
-        # Dessiner les cercles
+        # Dessiner les cercles avec la nouvelle translation
         for line in self.lines:
             for item in line:
                 if isinstance(item, tuple) and len(item) == 3 and item[2] == 'circle':
                     x, y, _ = item
-                    dwg.append(draw.Circle(center=(x, y), r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
+                    dwg.append(draw.Circle(center=(x - margin_x, y - margin_y), 
+                                           r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
 
         dwg.save_svg('output.svg')
         print("Exported to output.svg")
     
     def export_animated_svg(self):
-        dwg = draw.Drawing(self.grid_size * self.cell_size, self.grid_size * self.cell_size, origin='center')
+        # Définir les coordonnées du rectangle de la zone de dessin
+        margin_x, margin_y = 15, 15
+        width = 585 - 15
+        height = 585 - 15
+        
+        dwg = draw.Drawing(width, height, origin=(margin_x, margin_y))
 
         # Ajouter les cercles (toujours visibles) - on conserve les points intermédiaires
         for line in self.lines:
             for item in line:
                 if isinstance(item, tuple) and len(item) == 3 and item[2] == 'circle':
                     x, y, _ = item
-                    circle_elem = draw.Circle(cx=x, cy=y, r=(self.line_width_slider.get() * 3) // 2, fill=self.color)
+                    circle_elem = draw.Circle(cx=x - margin_x, cy=y - margin_y, 
+                                              r=(self.line_width_slider.get() * 3) // 2, fill=self.color)
                     dwg.append(circle_elem)
 
-        # Ajouter les lignes avec un "stylo" qui trace chaque segment progressivement
+        # Ajouter une animation de stylo pour chaque ligne, qui trace tous les segments
         for line in self.lines:
             if line and isinstance(line[0], tuple):
-                for i in range(len(line) - 1):
-                    start_point = line[i]
-                    end_point = line[i + 1]
-                    
-                    # Créer un élément de chemin pour l'animation
-                    line_elem = draw.Path(stroke=self.color, stroke_width=self.line_width_slider.get(), fill='none')
+                # Créer un élément de chemin pour l'animation de "stylo"
+                line_elem = draw.Path(stroke=self.color, stroke_width=self.line_width_slider.get(), fill='none')
 
-                    # Ajouter une animation de stylo pour chaque segment
-                    line_elem.M(start_point[0], start_point[1])  # Début du segment
-                    line_elem.L(end_point[0], end_point[1])  # Fin du segment
+                # Commencer à la première coordonnée
+                line_elem.M(line[0][0] - margin_x, line[0][1] - margin_y)
 
-                    # Animation pour dessiner le segment progressivement
-                    line_elem.append_anim(
-                        draw.Animate('stroke-dashoffset', dur='2s', from_="100", to="0", repeatCount='indefinite')
-                    )
-                    line_elem.append_anim(
-                        draw.Animate('stroke-dasharray', dur='2s', from_="1, 200", to="200, 0", repeatCount='indefinite')
-                    )
+                # Ajouter chaque segment successivement à partir de la première coordonnée
+                for i in range(1, len(line)):
+                    line_elem.L(line[i][0] - margin_x, line[i][1] - margin_y)
 
-                    dwg.append(line_elem)
+                # Ajouter une animation de tracé progressif
+                line_elem.append_anim(
+                    draw.Animate('stroke-dashoffset', dur='2s', from_="100", to="0", repeatCount='indefinite')
+                )
+                line_elem.append_anim(
+                    draw.Animate('stroke-dasharray', dur='2s', from_="1, 200", to="200, 0", repeatCount='indefinite')
+                )
+
+                dwg.append(line_elem)
 
         dwg.save_svg('output_animated.svg')
         print("Exporté vers output_animated.svg")
