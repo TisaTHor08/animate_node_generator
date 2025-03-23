@@ -119,21 +119,22 @@ class GridDrawingApp:
         print("Exported to output.svg")
     
     def export_animated_svg(self):
-        # Définir les coordonnées du rectangle de la zone de dessin
         margin_x, margin_y = 15, 15
         width = 585 - 15
         height = 585 - 15
         
         dwg = draw.Drawing(width, height, origin=(margin_x, margin_y))
 
-        # Ajouter les cercles (toujours visibles) - on conserve les points intermédiaires
+        # Ajouter les cercles (toujours visibles)
         for line in self.lines:
             for item in line:
                 if isinstance(item, tuple) and len(item) == 3 and item[2] == 'circle':
                     x, y, _ = item
-                    circle_elem = draw.Circle(cx=x - margin_x, cy=y - margin_y, 
-                                              r=(self.line_width_slider.get() * 3) // 2, fill=self.color)
-                    dwg.append(circle_elem)
+                    dwg.append(draw.Circle(cx=x - margin_x, cy=y - margin_y, 
+                                        r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
+
+        # Vitesse constante en pixels par seconde
+        speed = 10  # pixels par seconde
 
         # Ajouter une animation de stylo pour chaque ligne, qui trace tous les segments
         for line in self.lines:
@@ -144,22 +145,32 @@ class GridDrawingApp:
                 # Commencer à la première coordonnée
                 line_elem.M(line[0][0] - margin_x, line[0][1] - margin_y)
 
+                # Calculer la longueur totale de la ligne
+                line_length = 0
+                for i in range(1, len(line)):
+                    line_length += ((line[i][0] - line[i-1][0])**2 + (line[i][1] - line[i-1][1])**2) ** 0.5
+                
+                # Calculer la durée de l'animation en fonction de la longueur de la ligne et de la vitesse
+                duration = line_length / speed  # La durée est la longueur divisée par la vitesse
+
                 # Ajouter chaque segment successivement à partir de la première coordonnée
                 for i in range(1, len(line)):
                     line_elem.L(line[i][0] - margin_x, line[i][1] - margin_y)
 
-                # Ajouter une animation de tracé progressif
+                # Définir l'animation avec un `stroke-dasharray` constant
+                from_dasharray = f"1, {line_length * 10}"  # Segment très court au début
+                to_dasharray = f"{line_length * 10}, 0"  # Segment long à la fin
+
+                # Appliquer l'animation
                 line_elem.append_anim(
-                    draw.Animate('stroke-dashoffset', dur='2s', from_="100", to="0", repeatCount='indefinite')
-                )
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur='2s', from_="1, 200", to="200, 0", repeatCount='indefinite')
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray, repeatCount='indefinite')
                 )
 
                 dwg.append(line_elem)
 
         dwg.save_svg('output_animated.svg')
         print("Exporté vers output_animated.svg")
+
 
     def print_intermediate_points(self, event):
         for key, value in self.intermediate_points.items():
