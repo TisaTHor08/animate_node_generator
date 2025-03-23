@@ -89,6 +89,9 @@ class GridDrawingApp:
                 x, y = p2
                 radius = self.line_width_slider.get() * 2
                 self.canvas.create_rectangle(x - radius, y - radius, x + radius, y + radius, outline="red", width=2)
+                
+                # Entourer les cases précédentes et suivantes en vert
+                self.highlight_surrounding_cases(p1, p3)
     
     def is_angle(self, p1, p2, p3):
         # Fonction pour déterminer si un point p2 est un angle formé par p1 et p3
@@ -113,6 +116,13 @@ class GridDrawingApp:
         
         # Si l'angle est proche de 90 degrés, c'est un angle
         return abs(angle - math.pi / 2) < 0.2
+    
+    def highlight_surrounding_cases(self, p1, p3):
+        # Entourer les cases précédentes (p1) et suivantes (p3) en vert
+        for p in [p1, p3]:
+            x, y = p
+            radius = self.line_width_slider.get() * 2
+            self.canvas.create_rectangle(x - radius, y - radius, x + radius, y + radius, outline="green", width=2)
     
     def reset(self):
         self.canvas.delete("all")
