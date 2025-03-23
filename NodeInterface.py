@@ -16,6 +16,7 @@ class GridDrawingApp:
         self.dots = []
         self.lines = []  # Liste de lignes, chaque ligne est une liste de points
         self.intermediate_points = {}  # Dictionnaire pour stocker les points intermédiaires
+        self.angle_rounding = 5.0  # Valeur d'arrondi par défaut pour les angles (en pixels)
         
         self.canvas = tk.Canvas(root, width=self.cell_size*self.grid_size, height=self.cell_size*self.grid_size, bg="white")
         self.canvas.pack(side=tk.LEFT)
@@ -30,6 +31,13 @@ class GridDrawingApp:
         self.line_width_slider = tk.Scale(self.controls_frame, from_=1, to=10, orient=tk.HORIZONTAL, label="Line Width")
         self.line_width_slider.set(self.line_width)
         self.line_width_slider.pack(pady=5)
+        
+        self.angle_rounding_label = tk.Label(self.controls_frame, text="Angle Rounding (in px)")
+        self.angle_rounding_label.pack(pady=5)
+        
+        self.angle_rounding_entry = tk.Entry(self.controls_frame)
+        self.angle_rounding_entry.insert(0, str(self.angle_rounding))
+        self.angle_rounding_entry.pack(pady=5)
         
         self.reset_button = tk.Button(self.controls_frame, text="Reset", command=self.reset)
         self.reset_button.pack(pady=5)
@@ -93,8 +101,10 @@ class GridDrawingApp:
                 # Entourer les cases précédentes et suivantes en vert
                 self.highlight_surrounding_cases(p1, p3)
                 
-                # Dessiner une courbe de Bézier entre p1 et p3
-                self.draw_bezier_curve(p1, p2, p3)
+                # Tracer la courbe de Bézier cubique et afficher la liste des points
+                bezier_points = self.calculate_cubic_bezier_curve(p1, p2, p3)
+                print(f"Angle n°{i}: {bezier_points}")
+                self.draw_bezier_curve(bezier_points)
     
     def is_angle(self, p1, p2, p3):
         # Fonction pour déterminer si un point p2 est un angle formé par p1 et p3
@@ -127,23 +137,26 @@ class GridDrawingApp:
             radius = self.line_width_slider.get() * 2
             self.canvas.create_rectangle(x - radius, y - radius, x + radius, y + radius, outline="green", width=2)
     
-    def draw_bezier_curve(self, p1, p2, p3):
-        # Fonction pour dessiner une courbe de Bézier quadratique entre p1, p2, et p3
-        x0, y0 = p1
-        x1, y1 = p2
-        x2, y2 = p3
+    def calculate_cubic_bezier_curve(self, p1, p2, p3):
+        # Obtenir la valeur d'arrondi entrée par l'utilisateur
+        self.angle_rounding = float(self.angle_rounding_entry.get())
         
-        # Calculer les points de la courbe de Bézier pour différents t
+        # Calcul des points de contrôle en utilisant l'arrondi de l'angle
+        control1 = (p1[0] + (p2[0] - p1[0]) / (2 + self.angle_rounding), p1[1] + (p2[1] - p1[1]) / (2 + self.angle_rounding))
+        control2 = (p3[0] - (p3[0] - p2[0]) / (2 + self.angle_rounding), p3[1] - (p3[1] - p2[1]) / (2 + self.angle_rounding))
+        
+        # Calculer 10 points sur la courbe de Bézier cubique
         bezier_points = []
-        for t in range(101):  # De t = 0 à t = 1, avec un pas de 0.01
-            t /= 100
-            x = (1 - t) ** 2 * x0 + 2 * (1 - t) * t * x1 + t ** 2 * x2
-            y = (1 - t) ** 2 * y0 + 2 * (1 - t) * t * y1 + t ** 2 * y2
+        for t in [i / 9 for i in range(10)]:
+            x = (1 - t) ** 3 * p1[0] + 3 * (1 - t) ** 2 * t * control1[0] + 3 * (1 - t) * t ** 2 * control2[0] + t ** 3 * p3[0]
+            y = (1 - t) ** 3 * p1[1] + 3 * (1 - t) ** 2 * t * control1[1] + 3 * (1 - t) * t ** 2 * control2[1] + t ** 3 * p3[1]
             bezier_points.append((x, y))
-        
-        # Tracer la courbe de Bézier sur le canevas
-        for i in range(len(bezier_points) - 1):
-            self.canvas.create_line(bezier_points[i], bezier_points[i+1], fill="blue", width=2)
+        return bezier_points
+    
+    def draw_bezier_curve(self, points):
+        # Relier les points de la courbe de Bézier par une ligne rouge
+        for i in range(len(points) - 1):
+            self.canvas.create_line(points[i][0], points[i][1], points[i+1][0], points[i+1][1], fill="red", width=2)
     
     def reset(self):
         self.canvas.delete("all")
@@ -222,34 +235,26 @@ class GridDrawingApp:
                 duration = line_length / speed  # La durée est la longueur divisée par la vitesse
 
                 # Print pour vérifier la durée calculée
-                print(f"Durée calculée pour la ligne : {duration:.2f} secondes (longueur: {line_length:.2f} px, vitesse: {speed} px/s)")
+                print(f"Line length: {line_length}, Duration: {duration} seconds")
 
-                # Démarrer le chronomètre
-                start_time = time.time()
-
-                # Ajouter chaque segment successivement à partir de la première coordonnée
+                # Ajouter l'animation de trace
                 for i in range(1, len(line)):
                     line_elem.L(line[i][0] - margin_x, line[i][1] - margin_y)
 
-                # Définir l'animation avec un `stroke-dasharray` constant
-                from_dasharray = f"1, {line_length * 1}"  # Segment très court au début
-                to_dasharray = f"{line_length * 1}, 0"  # Segment long à la fin
-                # Appliquer l'animation pour tracer la ligne
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', values=f'{from_dasharray}; {to_dasharray}; {from_dasharray}', repeatCount="indefinite")
-                )
-                # Ajouter l'élément au dessin
+                # Appliquer l'animation (début de la ligne invisible, fin de la ligne entièrement visible)
+                line_elem.animation('stroke-dasharray', '0,{line_length}', duration=duration, begin="0s", repeatCount="indefinite")
+                to_dasharray = f"{line_length},{line_length}"  # Commencer l'animation avec la ligne complètement invisible
+                to_dasharray = f"{line_length},{line_length}"  # Se terminer avec la ligne entièrement visible
                 dwg.append(line_elem)
 
-        # Sauvegarder l'animation dans un fichier SVG
         dwg.save_svg('output_animated.svg')
-        print("Exporté vers output_animated.svg")
+        print("Exported animated SVG to output_animated.svg")
 
     def print_intermediate_points(self, event):
         for key, value in self.intermediate_points.items():
-            print(f"Line {key}: {value}")
+            print(f"Ligne {key}: {value}")
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = GridDrawingApp(root)
-    root.mainloop()  # Démarrer la boucle d'événements de Tkinter
+    root.mainloop()
