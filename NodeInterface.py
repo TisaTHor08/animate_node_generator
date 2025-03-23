@@ -167,12 +167,11 @@ class GridDrawingApp:
                 # Définir l'animation avec un `stroke-dasharray` constant
                 from_dasharray = f"1, {line_length * 1}"  # Segment très court au début
                 to_dasharray = f"{line_length * 1}, 0"  # Segment long à la fin
-
                 # Appliquer l'animation pour tracer la ligne
                 line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray)
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', values=f'{from_dasharray}; {to_dasharray}; {from_dasharray}', repeatCount="indefinite")
                 )
-
+                """
                 # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
@@ -184,6 +183,11 @@ class GridDrawingApp:
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray,
                                 begin=f'{duration * 2}s', repeatCount="indefinite")  # Recommence après effacement
                 )
+                # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
+                line_elem.append_anim(
+                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
+                                begin=f'{duration * 3}s', repeatCount="indefinite")  # Délai de 0,5s avant d'effacer
+                )"""
 
                 # Ajouter l'élément au dessin
                 dwg.append(line_elem)
