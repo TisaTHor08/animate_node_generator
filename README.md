@@ -3,7 +3,8 @@
 Animate Node Generator est une application Python avec interface graphique (Tkinter) permettant de dessiner des nœuds sous forme de points connectés, de personnaliser leurs couleurs et épaisseurs, puis de les animer automatiquement avant de les exporter en SVG.
 
 ## 📸 Aperçu de l'interface
-![image](https://github.com/user-attachments/assets/a8ae9124-886e-4313-b36d-1411b788eebf)
+![image](https://github.com/user-attachments/assets/b558a8a6-8823-4513-9c8c-c5f00409b11a)
+
 
 ## ✨ Fonctionnalités
 
@@ -11,12 +12,14 @@ Animate Node Generator est une application Python avec interface graphique (Tkin
 - Connexion des nœuds avec des lignes
 - Personnalisation des couleurs et de l'épaisseur des lignes
 - Animation automatique des connexions
+- Angles arrondis
 - Export en format SVG
 
 
 ## 📜 Exemple de SVG généré
+![output_animated](https://github.com/user-attachments/assets/998c03a0-7b1f-484c-a412-a43a9a5ecb8a)
 
-![output_animated](https://github.com/user-attachments/assets/49bba32f-f692-4ed3-9773-d6a5ddd22eba)
+
 
 
 ## 🚀 Installation
