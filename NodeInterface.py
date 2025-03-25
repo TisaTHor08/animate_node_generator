@@ -118,7 +118,7 @@ class GridDrawingApp:
             for item in line:
                 if isinstance(item, tuple) and len(item) == 3 and item[2] == 'circle':
                     x, y, _ = item
-                    dwg.append(draw.Circle(center=(x - margin_x, y - margin_y), 
+                    dwg.append(draw.Circle(cx=x - margin_x, cy=y - margin_y, 
                                            r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
 
         dwg.save_svg('output.svg')

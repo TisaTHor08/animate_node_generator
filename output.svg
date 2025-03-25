@@ -6,8 +6,12 @@
 <path d="M450,90 L450,120" stroke="black" stroke-width="10" stroke-linecap="round" />
 <path d="M450,120 L450,150" stroke="black" stroke-width="10" stroke-linecap="round" />
 <path d="M450,150 L450,180" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M450,180 L420,180" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M420,180 L390,180" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M390,180 L360,180" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M360,180 L330,180" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M450,180 L450,210" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M450,210 L420,210" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M420,210 L390,210" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M390,210 L360,210" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M360,210 L330,210" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M330,210 L300,210" stroke="black" stroke-width="10" stroke-linecap="round" />
+<circle cx="450" cy="90" r="15" fill="black" />
+<circle cx="300" cy="210" r="15" fill="black" />
 </svg>
