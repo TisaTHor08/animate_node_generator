@@ -3,7 +3,15 @@
      width="570" height="570" viewBox="15 15 570 570">
 <defs>
 </defs>
-<path d="M420,60 L420,90 L420,120 L420,150 L420,180 L390,180 L360,180 L330,180 L300,180" stroke="black" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
-<animate attributeName="stroke-dasharray" dur="2.4s" values="1, 240.0; 240.0, 0; 1, 240.0" repeatCount="indefinite" />
+<circle cx="450" cy="60" r="15" fill="black" />
+<circle cx="330" cy="270" r="15" fill="black" />
+<path d="M450,60 L450,90 L450,120 L450,150 L450,180 L420,180 L390,180 L360,180 L330,180 L330,210 L330,240 L330,270" stroke="black" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<animate attributeName="stroke-dasharray" dur="0.66s" values="1, 330.0; 330.0, 0; 1, 330.0" repeatCount="indefinite" />
+</path>
+<path d="M450,60" stroke="black" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
+</path>
+<path d="M330,270" stroke="black" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
 </path>
 </svg>

@@ -30,6 +30,10 @@ class GridDrawingApp:
         self.line_width_slider.set(self.line_width)
         self.line_width_slider.pack(pady=5)
         
+        self.speed_slider = tk.Scale(self.controls_frame, from_=50, to=500, orient=tk.HORIZONTAL, label="Animation Speed (px/s)")
+        self.speed_slider.set(100)
+        self.speed_slider.pack(pady=5)
+        
         self.reset_button = tk.Button(self.controls_frame, text="Reset", command=self.reset)
         self.reset_button.pack(pady=5)
         
@@ -140,7 +144,7 @@ class GridDrawingApp:
                                         r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
 
         # Vitesse constante en pixels par seconde
-        speed = 100  # pixels par seconde
+        speed = self.speed_slider.get()  # pixels par seconde
 
         # Ajouter une animation de stylo pour chaque ligne, qui trace tous les segments
         for line in self.lines:
