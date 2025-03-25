@@ -40,6 +40,10 @@ class GridDrawingApp:
         self.animated_checkbox = tk.Checkbutton(self.controls_frame, text="Animated", variable=self.animated_var)
         self.animated_checkbox.pack(pady=5)
         
+        self.rounded_corners_var = tk.BooleanVar()
+        self.rounded_corners_checkbox = tk.Checkbutton(self.controls_frame, text="Rounded Corners", variable=self.rounded_corners_var)
+        self.rounded_corners_checkbox.pack(pady=5)
+        
         self.canvas.bind("<Button-3>", self.place_circle)
         self.canvas.bind("<ButtonPress-1>", self.start_line)
         self.canvas.bind("<B1-Motion>", self.draw_temp_points)
@@ -106,7 +110,8 @@ class GridDrawingApp:
                     end_x, end_y = line[i+1]
                     dwg.append(draw.Line(sx=start_x - margin_x, sy=start_y - margin_y, 
                                          ex=end_x - margin_x, ey=end_y - margin_y, 
-                                         stroke=self.color, stroke_width=self.line_width_slider.get(), stroke_linecap='round'))
+                                         stroke=self.color, stroke_width=self.line_width_slider.get(),
+                                         stroke_linecap='round' if self.rounded_corners_var.get() else 'butt'))
         
         # Dessiner les cercles avec la nouvelle translation
         for line in self.lines:
@@ -141,7 +146,9 @@ class GridDrawingApp:
         for line in self.lines:
             if line and isinstance(line[0], tuple):
                 # Créer un élément de chemin pour l'animation de "stylo"
-                line_elem = draw.Path(stroke=self.color, stroke_width=self.line_width_slider.get(), fill='none')
+                line_elem = draw.Path(stroke=self.color, stroke_width=self.line_width_slider.get(), 
+                                    fill='none', stroke_linecap='round' if self.rounded_corners_var.get() else 'butt',
+                                    stroke_linejoin='round' if self.rounded_corners_var.get() else 'miter')
 
                 # Commencer à la première coordonnée
                 line_elem.M(line[0][0] - margin_x, line[0][1] - margin_y)
@@ -171,23 +178,6 @@ class GridDrawingApp:
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', values=f'{from_dasharray}; {to_dasharray}; {from_dasharray}', repeatCount="indefinite")
                 )
-                """
-                # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
-                                begin=f'{duration}s')  # Délai de 0,5s avant d'effacer
-                )
-
-                # Ajouter une animation de tracé répétée après l'effacement
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=from_dasharray, to=to_dasharray,
-                                begin=f'{duration * 2}s', repeatCount="indefinite")  # Recommence après effacement
-                )
-                # Appliquer l'animation inverse pour effacer la ligne avec un délai de 0,5 seconde
-                line_elem.append_anim(
-                    draw.Animate('stroke-dasharray', dur=f'{duration}s', from_=to_dasharray, to=from_dasharray, 
-                                begin=f'{duration * 3}s', repeatCount="indefinite")  # Délai de 0,5s avant d'effacer
-                )"""
 
                 # Ajouter l'élément au dessin
                 dwg.append(line_elem)

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="570" height="570" viewBox="15 15 570 570">
+<defs>
+</defs>
+<path d="M450,90 L450,120" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M450,120 L450,150" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M450,150 L450,180" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M450,180 L420,180" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M420,180 L390,180" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M390,180 L360,180" stroke="black" stroke-width="10" stroke-linecap="round" />
+<path d="M360,180 L330,180" stroke="black" stroke-width="10" stroke-linecap="round" />
+</svg>

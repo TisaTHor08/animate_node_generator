@@ -3,37 +3,7 @@
      width="570" height="570" viewBox="15 15 570 570">
 <defs>
 </defs>
-<circle cx="60" cy="330" r="15" fill="#c050f1" />
-<circle cx="270" cy="300" r="15" fill="#c050f1" />
-<circle cx="210" cy="180" r="15" fill="#c050f1" />
-<circle cx="270" cy="60" r="15" fill="#c050f1" />
-<circle cx="390" cy="150" r="15" fill="#c050f1" />
-<circle cx="420" cy="330" r="15" fill="#c050f1" />
-<path d="M270,60 L240,60 L240,90 L240,120 L240,150 L240,180 L210,180" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="1.8s" values="1, 180.0; 180.0, 0; 1, 180.0" repeatCount="indefinite" />
-</path>
-<path d="M390,150 L390,180 L390,210 L390,240 L420,240 L420,270 L420,300 L420,330" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="2.1s" values="1, 210.0; 210.0, 0; 1, 210.0" repeatCount="indefinite" />
-</path>
-<path d="M60,330 L90,330 L120,330 L150,330 L180,330 L180,300 L210,300 L240,300 L270,300" stroke="#c050f1" stroke-width="10" fill="none">
+<path d="M420,60 L420,90 L420,120 L420,150 L420,180 L390,180 L360,180 L330,180 L300,180" stroke="black" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
 <animate attributeName="stroke-dasharray" dur="2.4s" values="1, 240.0; 240.0, 0; 1, 240.0" repeatCount="indefinite" />
-</path>
-<path d="M60,330" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
-</path>
-<path d="M270,300" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
-</path>
-<path d="M210,180" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
-</path>
-<path d="M270,60" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
-</path>
-<path d="M390,150" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
-</path>
-<path d="M420,330" stroke="#c050f1" stroke-width="10" fill="none">
-<animate attributeName="stroke-dasharray" dur="0.0s" values="1, 0; 0, 0; 1, 0" repeatCount="indefinite" />
 </path>
 </svg>
