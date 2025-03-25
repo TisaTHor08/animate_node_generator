@@ -202,97 +202,90 @@ class GridDrawingApp:
         else:
             self.export_static_svg()
     
-    def export_static_svg(self):
-        # Définir les coordonnées du rectangle de la zone de dessin
-        margin_x, margin_y = 15, 15
-        width = 585 - 15
-        height = 585 - 15
-        
-        dwg = draw.Drawing(width, height, origin=(margin_x, margin_y))
+    def calculate_grid_boundaries(self):
+        # Calculate the actual grid boundaries
+        first_cell_x = self.cell_size // 2
+        first_cell_y = self.cell_size // 2
+        last_cell_x = (self.grid_size * self.cell_size) - (self.cell_size // 2)
+        last_cell_y = (self.grid_size * self.cell_size) - (self.cell_size // 2)
+        return first_cell_x, first_cell_y, last_cell_x, last_cell_y
 
-        # Dessiner les lignes avec la nouvelle translation
+    def export_static_svg(self):
+        # Get grid boundaries
+        first_cell_x, first_cell_y, last_cell_x, last_cell_y = self.calculate_grid_boundaries()
+        width = last_cell_x - first_cell_x + self.cell_size
+        height = last_cell_y - first_cell_y + self.cell_size
+        
+        dwg = draw.Drawing(width, height)
+
+        # Adjust coordinates relative to grid boundaries
         for line in self.lines:
             if line and isinstance(line[0], tuple):
                 for i in range(len(line) - 1):
                     start_x, start_y = line[i]
                     end_x, end_y = line[i+1]
-                    dwg.append(draw.Line(sx=start_x - margin_x, sy=start_y - margin_y, 
-                                         ex=end_x - margin_x, ey=end_y - margin_y, 
-                                         stroke=self.color, stroke_width=self.line_width_slider.get(),
-                                         stroke_linecap='round' if self.rounded_corners_var.get() else 'butt'))
+                    dwg.append(draw.Line(sx=start_x - first_cell_x, sy=start_y - first_cell_y, 
+                                       ex=end_x - first_cell_x, ey=end_y - first_cell_y, 
+                                       stroke=self.color, stroke_width=self.line_width_slider.get(),
+                                       stroke_linecap='round' if self.rounded_corners_var.get() else 'butt'))
         
-        # Dessiner les cercles avec la nouvelle translation
+        # Adjust circle coordinates
         for line in self.lines:
             for item in line:
                 if isinstance(item, tuple) and len(item) == 3 and item[2] == 'circle':
                     x, y, _ = item
-                    dwg.append(draw.Circle(cx=x - margin_x, cy=y - margin_y, 
-                                           r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
+                    dwg.append(draw.Circle(cx=x - first_cell_x, cy=y - first_cell_y, 
+                                         r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
 
         dwg.save_svg('output.svg')
         print("Exported to output.svg")
 
     def export_animated_svg(self):
-        margin_x, margin_y = 15, 15
-        width = 585 - 15
-        height = 585 - 15
+        # Get grid boundaries
+        first_cell_x, first_cell_y, last_cell_x, last_cell_y = self.calculate_grid_boundaries()
+        width = last_cell_x - first_cell_x + self.cell_size
+        height = last_cell_y - first_cell_y + self.cell_size
         
-        dwg = draw.Drawing(width, height, origin=(margin_x, margin_y))
+        dwg = draw.Drawing(width, height)
 
-        # Ajouter les cercles (toujours visibles)
+        # Adjust circle coordinates
         for line in self.lines:
             for item in line:
                 if isinstance(item, tuple) and len(item) == 3 and item[2] == 'circle':
                     x, y, _ = item
-                    dwg.append(draw.Circle(cx=x - margin_x, cy=y - margin_y, 
-                                        r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
+                    dwg.append(draw.Circle(cx=x - first_cell_x, cy=y - first_cell_y, 
+                                         r=(self.line_width_slider.get() * 3) // 2, fill=self.color))
 
-        # Vitesse constante en pixels par seconde
-        speed = self.speed_slider.get()  # pixels par seconde
+        speed = self.speed_slider.get()
 
-        # Ajouter une animation de stylo pour chaque ligne, qui trace tous les segments
         for line in self.lines:
             if line and isinstance(line[0], tuple):
-                # Créer un élément de chemin pour l'animation de "stylo"
                 line_elem = draw.Path(stroke=self.color, stroke_width=self.line_width_slider.get(), 
                                     fill='none', stroke_linecap='round' if self.rounded_corners_var.get() else 'butt',
                                     stroke_linejoin='round' if self.rounded_corners_var.get() else 'miter')
 
-                # Commencer à la première coordonnée
-                line_elem.M(line[0][0] - margin_x, line[0][1] - margin_y)
+                # Adjust first coordinate
+                line_elem.M(line[0][0] - first_cell_x, line[0][1] - first_cell_y)
 
-                # Calculer la longueur totale de la ligne
                 line_length = 0
                 for i in range(1, len(line)):
                     line_length += ((line[i][0] - line[i-1][0])**2 + (line[i][1] - line[i-1][1])**2) ** 0.5
                 
-                # Calculer la durée de l'animation en fonction de la longueur de la ligne et de la vitesse
-                duration = line_length / speed  # La durée est la longueur divisée par la vitesse
+                duration = line_length / speed
 
-                # Print pour vérifier la durée calculée
-                print(f"Durée calculée pour la ligne : {duration:.2f} secondes (longueur: {line_length:.2f} px, vitesse: {speed} px/s)")
-
-                # Démarrer le chronomètre
-                start_time = time.time()
-
-                # Ajouter chaque segment successivement à partir de la première coordonnée
                 for i in range(1, len(line)):
-                    line_elem.L(line[i][0] - margin_x, line[i][1] - margin_y)
+                    line_elem.L(line[i][0] - first_cell_x, line[i][1] - first_cell_y)
 
-                # Définir l'animation avec un `stroke-dasharray` constant
-                from_dasharray = f"1, {line_length * 1}"  # Segment très court au début
-                to_dasharray = f"{line_length * 1}, 0"  # Segment long à la fin
-                # Appliquer l'animation pour tracer la ligne
+                from_dasharray = f"1, {line_length * 1}"
+                to_dasharray = f"{line_length * 1}, 0"
                 line_elem.append_anim(
                     draw.Animate('stroke-dasharray', dur=f'{duration}s', values=f'{from_dasharray}; {to_dasharray}; {from_dasharray}', repeatCount="indefinite")
                 )
 
-                # Ajouter l'élément au dessin
                 dwg.append(line_elem)
 
-        # Sauvegarder l'animation dans un fichier SVG
         dwg.save_svg('output_animated.svg')
-        print("Exporté vers output_animated.svg")
+        print("Exported to output_animated.svg")
 
 
 

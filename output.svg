@@ -1,17 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="570" height="570" viewBox="15 15 570 570">
+     width="600" height="600" viewBox="0 0 600 600">
 <defs>
 </defs>
-<path d="M450,90 L450,120" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M450,120 L450,150" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M450,150 L450,180" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M450,180 L450,210" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M450,210 L420,210" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M420,210 L390,210" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M390,210 L360,210" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M360,210 L330,210" stroke="black" stroke-width="10" stroke-linecap="round" />
-<path d="M330,210 L300,210" stroke="black" stroke-width="10" stroke-linecap="round" />
-<circle cx="450" cy="90" r="15" fill="black" />
-<circle cx="300" cy="210" r="15" fill="black" />
+<path d="M0,0 L0,30" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,30 L0,60" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,60 L0,90" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,90 L0,120" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,120 L0,150" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M180,0 L150,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M150,0 L120,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M120,0 L90,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M90,0 L60,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M60,0 L30,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M30,0 L0,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,0 L540,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M540,0 L510,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M510,0 L480,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M480,0 L450,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M450,0 L420,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M420,0 L390,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M390,0 L360,0" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,0 L570,30" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,30 L570,60" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,60 L570,90" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,90 L570,120" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,120 L570,150" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,150 L570,180" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,180 L570,210" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,210 L570,240" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,570 L0,540" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,540 L0,510" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,510 L0,480" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,480 L30,480" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M30,480 L30,450" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M30,450 L30,420" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M30,420 L30,390" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M0,570 L30,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M30,570 L60,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M60,570 L90,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M90,570 L120,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M120,570 L150,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M150,570 L180,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M180,570 L180,540" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,570 L540,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M540,570 L510,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M510,570 L480,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M480,570 L450,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M450,570 L420,570" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,570 L570,540" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,540 L570,510" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,510 L570,480" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
+<path d="M570,480 L570,450" stroke="#3498DB" stroke-width="10" stroke-linecap="round" />
 </svg>
