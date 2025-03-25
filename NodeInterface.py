@@ -1,52 +1,144 @@
 import tkinter as tk
-from tkinter import colorchooser
+from tkinter import colorchooser, ttk
 import drawsvg as draw
 import time
+
+class ModernStyle:
+    def __init__(self):
+        self.bg_color = "#2C3E50"
+        self.fg_color = "#ECF0F1"
+        self.accent_color = "#3498DB"
+        self.button_hover = "#2980B9"
+        self.canvas_bg = "#34495E"
+        self.grid_color = "#7F8C8D"
+        self.font = ("Helvetica", 10)
+        
+    def style_button(self, button):
+        button.configure(
+            bg=self.accent_color,
+            fg=self.fg_color,
+            font=self.font,
+            relief=tk.FLAT,
+            padx=15,
+            pady=5
+        )
+        button.bind("<Enter>", lambda e: button.configure(bg=self.button_hover))
+        button.bind("<Leave>", lambda e: button.configure(bg=self.accent_color))
+    
+    def style_frame(self, frame):
+        frame.configure(bg=self.bg_color, padx=10, pady=10)
+    
+    def style_checkbox(self, checkbox):
+        checkbox.configure(
+            bg=self.bg_color,
+            fg=self.fg_color,
+            font=self.font,
+            selectcolor=self.accent_color
+        )
 
 class GridDrawingApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Grid Drawing App")
+        self.style = ModernStyle()
         
         self.cell_size = 30
         self.grid_size = 20
-        self.color = "black"
+        self.color = self.style.accent_color
         self.line_width = 3
         self.dots = []
-        self.lines = []  # Liste de lignes, chaque ligne est une liste de points
-        self.intermediate_points = {}  # Dictionnaire pour stocker les points intermédiaires
+        self.lines = []
+        self.intermediate_points = {}
         
-        self.canvas = tk.Canvas(root, width=self.cell_size*self.grid_size, height=self.cell_size*self.grid_size, bg="white")
-        self.canvas.pack(side=tk.LEFT)
+        # Configure main window
+        self.root.configure(bg=self.style.bg_color)
+        
+        # Create and style canvas
+        self.canvas = tk.Canvas(
+            root,
+            width=self.cell_size*self.grid_size,
+            height=self.cell_size*self.grid_size,
+            bg=self.style.canvas_bg,
+            highlightthickness=0
+        )
+        self.canvas.pack(side=tk.LEFT, padx=15, pady=15)
         self.draw_grid()
         
+        # Create and style controls frame
         self.controls_frame = tk.Frame(root)
-        self.controls_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        self.style.style_frame(self.controls_frame)
+        self.controls_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=15, pady=15)
         
+        # Title label
+        title_label = tk.Label(
+            self.controls_frame,
+            text="Drawing Controls",
+            font=("Helvetica", 14, "bold"),
+            bg=self.style.bg_color,
+            fg=self.style.fg_color
+        )
+        title_label.pack(pady=(0, 15))
+        
+        # Style and pack controls
         self.color_button = tk.Button(self.controls_frame, text="Choose Color", command=self.choose_color)
-        self.color_button.pack(pady=5)
+        self.style.style_button(self.color_button)
+        self.color_button.pack(pady=8, fill=tk.X)
         
-        self.line_width_slider = tk.Scale(self.controls_frame, from_=1, to=10, orient=tk.HORIZONTAL, label="Line Width")
+        # Style sliders
+        slider_style = {
+            "bg": self.style.bg_color,
+            "fg": self.style.fg_color,
+            "troughcolor": self.style.accent_color,
+            "font": self.style.font
+        }
+        
+        self.line_width_slider = tk.Scale(
+            self.controls_frame,
+            from_=1, to=10,
+            orient=tk.HORIZONTAL,
+            label="Line Width",
+            **slider_style
+        )
         self.line_width_slider.set(self.line_width)
-        self.line_width_slider.pack(pady=5)
+        self.line_width_slider.pack(pady=8, fill=tk.X)
         
-        self.speed_slider = tk.Scale(self.controls_frame, from_=50, to=500, orient=tk.HORIZONTAL, label="Animation Speed (px/s)")
+        self.speed_slider = tk.Scale(
+            self.controls_frame,
+            from_=50, to=500,
+            orient=tk.HORIZONTAL,
+            label="Animation Speed (px/s)",
+            **slider_style
+        )
         self.speed_slider.set(100)
-        self.speed_slider.pack(pady=5)
+        self.speed_slider.pack(pady=8, fill=tk.X)
         
+        # Action buttons
         self.reset_button = tk.Button(self.controls_frame, text="Reset", command=self.reset)
-        self.reset_button.pack(pady=5)
+        self.style.style_button(self.reset_button)
+        self.reset_button.pack(pady=8, fill=tk.X)
         
         self.export_button = tk.Button(self.controls_frame, text="Export SVG", command=self.export_svg)
-        self.export_button.pack(pady=5)
+        self.style.style_button(self.export_button)
+        self.export_button.pack(pady=8, fill=tk.X)
         
+        # Checkboxes
         self.animated_var = tk.BooleanVar()
-        self.animated_checkbox = tk.Checkbutton(self.controls_frame, text="Animated", variable=self.animated_var)
-        self.animated_checkbox.pack(pady=5)
+        self.animated_checkbox = tk.Checkbutton(
+            self.controls_frame,
+            text="Animated",
+            variable=self.animated_var
+        )
+        self.style.style_checkbox(self.animated_checkbox)
+        self.animated_checkbox.pack(pady=8)
         
         self.rounded_corners_var = tk.BooleanVar()
-        self.rounded_corners_checkbox = tk.Checkbutton(self.controls_frame, text="Rounded Corners", variable=self.rounded_corners_var)
-        self.rounded_corners_checkbox.pack(pady=5)
+        self.rounded_corners_checkbox = tk.Checkbutton(
+            self.controls_frame,
+            text="Rounded Corners",
+            variable=self.rounded_corners_var
+        )
+        self.style.style_checkbox(self.rounded_corners_checkbox)
+        self.rounded_corners_checkbox.pack(pady=8)
         
         self.canvas.bind("<Button-3>", self.place_circle)
         self.canvas.bind("<ButtonPress-1>", self.start_line)
@@ -56,8 +148,20 @@ class GridDrawingApp:
 
     def draw_grid(self):
         for i in range(self.grid_size + 1):
-            self.canvas.create_line(i * self.cell_size, 0, i * self.cell_size, self.grid_size * self.cell_size, fill="gray")
-            self.canvas.create_line(0, i * self.cell_size, self.grid_size * self.cell_size, i * self.cell_size, fill="gray")
+            self.canvas.create_line(
+                i * self.cell_size, 0,
+                i * self.cell_size, self.grid_size * self.cell_size,
+                fill=self.style.grid_color,
+                width=1,
+                dash=(2, 4)
+            )
+            self.canvas.create_line(
+                0, i * self.cell_size,
+                self.grid_size * self.cell_size, i * self.cell_size,
+                fill=self.style.grid_color,
+                width=1,
+                dash=(2, 4)
+            )
     
     def choose_color(self):
         color = colorchooser.askcolor()[1]
